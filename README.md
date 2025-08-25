@@ -1,18 +1,14 @@
-# Personal Blog Homepage  
+# 🌐 Personal Blog Homepage
 
-This is a **personal blog homepage project** developed as part of my internship at **Eleeovo Paths**.  
-It is a front-end project built with **HTML, CSS, and JavaScript** to showcase blog posts in a clean, minimal, and responsive layout.  
+A simple **Personal Blog Homepage** built with **HTML, CSS (Tailwind)**, and **JavaScript**.  
+This project displays blog posts in a card layout with **categories, search, and pagination**.  
 
-## 🚀 Features  
-- 📰 **Blog Cards** – Display blog posts with title, date, image, and short description.  
-- 🔎 **Search Functionality** – Search blog posts by title.  
-- 🏷 **Category Filter** – Filter posts by categories like Tech, Travel, Food.  
-- 📑 **Pagination** – Navigate through posts easily.  
-- 📱 **Responsive Design** – Fully responsive and mobile-friendly.  
+---
 
-## 🛠️ Tech Stack  
-- **HTML5**  
-- **CSS3**  
-- **JavaScript**
-
+## ✨ Features
+- 🏷️ **Category Filter** – Filter posts by category (Tech, Travel, Food, etc.)  
+- 🔎 **Search Functionality** – Find posts by typing keywords in the title  
+- 📄 **Pagination** – Navigate between pages with a limited number of posts per page  
+- 📱 **Responsive Layout** – Optimized for desktop, tablet, and mobile  
+- 🎨 **Modern UI** – Card layout with hover effects and clean design  
 
