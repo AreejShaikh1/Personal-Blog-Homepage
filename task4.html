@@ -1,179 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Personal Blog</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Personal Blog - Sukkur, Pakistan</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9fafb;
       margin: 0;
-      padding: 20px;
+      background: #f8fafc;
+      color: #1e293b;
     }
+
     header {
+      background: #0f172a;
+      color: #fff;
       text-align: center;
-      margin-bottom: 20px;
+      padding: 2rem 1rem;
     }
+
     header h1 {
-      font-size: 2rem;
-      margin-bottom: 5px;
+      margin: 0;
+      font-size: 2.2rem;
     }
-    .filters {
+
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .controls {
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 20px;
+      margin: 1rem;
     }
-    .filters button, .filters input {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      cursor: pointer;
+
+    .controls select,
+    .controls input {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
     }
-    .filters button.active {
-      background: #2563eb;
-      color: white;
-      border: none;
-    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      padding: 1.5rem;
     }
+
     .card {
-      background: white;
+      background: #fff;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
+
     .card:hover {
-      transform: scale(1.02);
+      transform: translateY(-5px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
     }
+
     .card img {
       width: 100%;
-      height: 150px;
+      height: 160px;
       object-fit: cover;
     }
+
     .card-content {
-      padding: 15px;
+      padding: 1rem;
     }
-    .card-content h2 {
+
+    .card-content h3 {
+      margin: 0 0 0.5rem;
       font-size: 1.2rem;
-      margin: 0 0 8px;
+      color: #0f172a;
     }
+
     .card-content p {
-      margin: 4px 0;
-      color: #555;
-      font-size: 0.9rem;
+      margin: 0 0 0.5rem;
+      font-size: 0.95rem;
+      color: #475569;
     }
+
+    .card-content small {
+      color: #64748b;
+      font-size: 0.85rem;
+    }
+
     .pagination {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      gap: 5px;
+      text-align: center;
+      margin: 1rem 0;
     }
+
     .pagination button {
-      padding: 6px 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      cursor: pointer;
-      background: white;
-    }
-    .pagination button.active {
-      background: #2563eb;
-      color: white;
+      padding: 0.6rem 1rem;
+      margin: 0 5px;
       border: none;
+      background: #0f172a;
+      color: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+
+    .pagination button:hover {
+      background: #1e293b;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #0f172a;
+      color: #fff;
+      margin-top: 2rem;
     }
   </style>
 </head>
 <body>
-
   <header>
     <h1>My Personal Blog</h1>
-    <p>Sharing thoughts, stories & experiences</p>
+    <p>Welcome to my blog from Sukkur, Pakistan 🌍</p>
   </header>
 
-  <div class="filters">
-    <button class="filter-btn active" data-category="All">All</button>
-    <button class="filter-btn" data-category="Tech">Tech</button>
-    <button class="filter-btn" data-category="Travel">Travel</button>
-    <button class="filter-btn" data-category="Food">Food</button>
-    <input type="text" id="searchInput" placeholder="Search posts...">
+  <div class="controls">
+    <select id="categoryFilter">
+      <option value="All">All Categories</option>
+      <option value="Tech">Tech</option>
+      <option value="Travel">Travel</option>
+      <option value="Food">Food</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="Search posts by title..." />
   </div>
 
-  <div id="postsGrid" class="grid"></div>
+  <div class="grid" id="postsGrid"></div>
 
-  <div class="pagination" id="pagination"></div>
+  <div class="pagination">
+    <button id="prevPage">Previous</button>
+    <button id="nextPage">Next</button>
+  </div>
+
+  <footer>
+    <p>© 2025 My Blog | Sukkur, Pakistan</p>
+  </footer>
 
   <script>
     const posts = [
-      { id: 1, title: "Exploring React Hooks", category: "Tech", image: "https://source.unsplash.com/400x200/?code", description: "A beginner-friendly guide to using React Hooks effectively.", date: "2025-08-10" },
-      { id: 2, title: "My Trip to the Mountains", category: "Travel", image: "https://source.unsplash.com/400x200/?mountains", description: "Sharing my travel experience and breathtaking views.", date: "2025-08-15" },
-      { id: 3, title: "Best Street Food in Asia", category: "Food", image: "https://source.unsplash.com/400x200/?food", description: "A food lover’s journey through Asian street food.", date: "2025-08-18" },
-      { id: 4, title: "Next.js vs React: What to Choose?", category: "Tech", image: "https://source.unsplash.com/400x200/?laptop", description: "Comparing Next.js with React for modern web apps.", date: "2025-08-19" },
-      { id: 5, title: "Hidden Beaches You Should Visit", category: "Travel", image: "https://source.unsplash.com/400x200/?beach", description: "Top underrated beach destinations for travelers.", date: "2025-08-20" },
+      { title: "Tech in 2025", category: "Tech", image: "https://via.placeholder.com/400x200?text=Tech", description: "Exploring the future of technology.", date: "2025-08-01" },
+      { title: "My Trip to Karachi", category: "Travel", image: "https://via.placeholder.com/400x200?text=Travel", description: "A wonderful journey to Karachi.", date: "2025-07-15" },
+      { title: "Best Biryani in Sindh", category: "Food", image: "https://via.placeholder.com/400x200?text=Food", description: "Tasting the best biryani in Sukkur.", date: "2025-06-25" },
+      { title: "AI & Future Jobs", category: "Tech", image: "https://via.placeholder.com/400x200?text=AI", description: "How AI will impact careers.", date: "2025-05-10" },
+      { title: "Trip to Islamabad", category: "Travel", image: "https://via.placeholder.com/400x200?text=Islamabad", description: "Exploring Islamabad’s beauty.", date: "2025-04-20" },
+      { title: "Street Food in Karachi", category: "Food", image: "https://via.placeholder.com/400x200?text=Foodie", description: "Street food adventures in Karachi.", date: "2025-03-12" },
     ];
 
     const postsPerPage = 3;
     let currentPage = 1;
-    let currentCategory = "All";
-    let searchQuery = "";
 
     const postsGrid = document.getElementById("postsGrid");
-    const pagination = document.getElementById("pagination");
+    const categoryFilter = document.getElementById("categoryFilter");
     const searchInput = document.getElementById("searchInput");
+    const prevPageBtn = document.getElementById("prevPage");
+    const nextPageBtn = document.getElementById("nextPage");
 
     function renderPosts() {
-      let filtered = posts.filter(post =>
-        (currentCategory === "All" || post.category === currentCategory) &&
-        post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      postsGrid.innerHTML = "";
+      let filteredPosts = posts.filter(post =>
+        (categoryFilter.value === "All" || post.category === categoryFilter.value) &&
+        post.title.toLowerCase().includes(searchInput.value.toLowerCase())
       );
 
-      const totalPages = Math.ceil(filtered.length / postsPerPage);
-      if (currentPage > totalPages) currentPage = 1;
-
       const start = (currentPage - 1) * postsPerPage;
-      const currentPosts = filtered.slice(start, start + postsPerPage);
+      const end = start + postsPerPage;
+      const paginatedPosts = filteredPosts.slice(start, end);
 
-      postsGrid.innerHTML = currentPosts.map(post => `
-        <div class="card">
-          <img src="${post.image}" alt="${post.title}">
+      paginatedPosts.forEach(post => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img src="${post.image}" alt="${post.title}" />
           <div class="card-content">
-            <h2>${post.title}</h2>
-            <p>${post.date} • ${post.category}</p>
+            <h3>${post.title}</h3>
             <p>${post.description}</p>
+            <small>${post.date} | ${post.category}</small>
           </div>
-        </div>
-      `).join("");
+        `;
+        postsGrid.appendChild(card);
+      });
 
-      pagination.innerHTML = "";
-      for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        btn.className = i === currentPage ? "active" : "";
-        btn.onclick = () => {
-          currentPage = i;
-          renderPosts();
-        };
-        pagination.appendChild(btn);
-      }
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = end >= filteredPosts.length;
     }
 
-    document.querySelectorAll(".filter-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        currentCategory = btn.dataset.category;
-        currentPage = 1;
-        renderPosts();
-      });
+    categoryFilter.addEventListener("change", () => {
+      currentPage = 1;
+      renderPosts();
     });
 
-    searchInput.addEventListener("input", (e) => {
-      searchQuery = e.target.value;
+    searchInput.addEventListener("input", () => {
       currentPage = 1;
+      renderPosts();
+    });
+
+    prevPageBtn.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderPosts();
+      }
+    });
+
+    nextPageBtn.addEventListener("click", () => {
+      currentPage++;
       renderPosts();
     });
 
