@@ -1,226 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Personal Blog - Sukkur, Pakistan</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
-      background: #f8fafc;
-      color: #1e293b;
+      padding: 0;
+      background: #f4f4f9;
+      color: #333;
     }
-
     header {
-      background: #0f172a;
-      color: #fff;
+      background: #2c3e50;
+      color: white;
       text-align: center;
-      padding: 2rem 1rem;
+      padding: 1.5rem;
     }
-
     header h1 {
       margin: 0;
-      font-size: 2.2rem;
     }
-
-    header p {
-      margin: 0.5rem 0 0;
-      font-size: 1.1rem;
-      opacity: 0.8;
+    .welcome {
+      background: #eaf2f8;
+      padding: 1.5rem;
+      text-align: center;
     }
-
     .controls {
       display: flex;
       justify-content: center;
+      gap: 1rem;
       flex-wrap: wrap;
-      gap: 10px;
-      margin: 1rem;
+      margin: 1rem 0;
     }
-
-    .controls select,
-    .controls input {
+    .controls select, .controls input {
       padding: 0.5rem;
       font-size: 1rem;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
     }
-
-    .grid {
+    .blog-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
-      padding: 1.5rem;
+      padding: 1rem 2rem;
     }
-
     .card {
-      background: #fff;
-      border-radius: 12px;
+      background: white;
+      border-radius: 10px;
       overflow: hidden;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s;
     }
-
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+      transform: scale(1.03);
     }
-
     .card img {
       width: 100%;
       height: 160px;
       object-fit: cover;
     }
-
     .card-content {
       padding: 1rem;
     }
-
     .card-content h3 {
-      margin: 0 0 0.5rem;
+      margin: 0;
       font-size: 1.2rem;
-      color: #0f172a;
+      color: #2c3e50;
     }
-
     .card-content p {
-      margin: 0 0 0.5rem;
       font-size: 0.95rem;
-      color: #475569;
+      margin: 0.5rem 0;
     }
-
-    .card-content small {
-      color: #64748b;
-      font-size: 0.85rem;
+    .date {
+      font-size: 0.8rem;
+      color: gray;
     }
-
     .pagination {
-      text-align: center;
-      margin: 1rem 0;
+      display: flex;
+      justify-content: center;
+      margin: 1.5rem 0;
+      gap: 1rem;
     }
-
     .pagination button {
-      padding: 0.6rem 1rem;
-      margin: 0 5px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      background: #2c3e50;
+      color: white;
       border: none;
-      background: #0f172a;
-      color: #fff;
-      border-radius: 8px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 0.95rem;
       transition: background 0.2s;
     }
-
     .pagination button:hover {
-      background: #1e293b;
+      background: #1a242f;
     }
-
     footer {
       text-align: center;
       padding: 1rem;
-      background: #0f172a;
-      color: #fff;
+      background: #2c3e50;
+      color: white;
       margin-top: 2rem;
     }
   </style>
 </head>
 <body>
+
   <header>
     <h1>My Personal Blog</h1>
-    <p>Welcome to my blog from Sukkur, Pakistan 🌍</p>
+    <p>Sharing Stories & Ideas from Sukkur, Pakistan 🌍</p>
   </header>
+
+  <div class="welcome">
+    <h2>Welcome to My Blog!</h2>
+    <p>Hi, I'm Areej from Sukkur, Pakistan. Here you’ll find my thoughts on Tech, Travel, and Food 🍴✈️💻</p>
+  </div>
 
   <div class="controls">
     <select id="categoryFilter">
-      <option value="All">All Categories</option>
+      <option value="all">All Categories</option>
       <option value="Tech">Tech</option>
       <option value="Travel">Travel</option>
       <option value="Food">Food</option>
     </select>
-    <input type="text" id="searchInput" placeholder="Search posts by title..." />
+    <input type="text" id="searchInput" placeholder="Search posts by title...">
   </div>
 
-  <div class="grid" id="postsGrid"></div>
+  <div class="blog-container" id="blogContainer"></div>
 
   <div class="pagination">
-    <button id="prevPage">Previous</button>
-    <button id="nextPage">Next</button>
+    <button onclick="prevPage()">Previous</button>
+    <button onclick="nextPage()">Next</button>
   </div>
 
   <footer>
-    <p>© 2025 My Blog | Sukkur, Pakistan</p>
+    <p>&copy; 2025 My Personal Blog | Sukkur, Pakistan</p>
   </footer>
 
   <script>
     const posts = [
-      { title: "Tech in 2025", category: "Tech", image: "https://via.placeholder.com/400x200?text=Tech", description: "Exploring the future of technology.", date: "2025-08-01" },
-      { title: "My Trip to Karachi", category: "Travel", image: "https://via.placeholder.com/400x200?text=Travel", description: "A wonderful journey to Karachi.", date: "2025-07-15" },
-      { title: "Best Biryani in Sindh", category: "Food", image: "https://via.placeholder.com/400x200?text=Food", description: "Tasting the best biryani in Sukkur.", date: "2025-06-25" },
-      { title: "AI & Future Jobs", category: "Tech", image: "https://via.placeholder.com/400x200?text=AI", description: "How AI will impact careers.", date: "2025-05-10" },
-      { title: "Trip to Islamabad", category: "Travel", image: "https://via.placeholder.com/400x200?text=Islamabad", description: "Exploring Islamabad’s beauty.", date: "2025-04-20" },
-      { title: "Street Food in Karachi", category: "Food", image: "https://via.placeholder.com/400x200?text=Foodie", description: "Street food adventures in Karachi.", date: "2025-03-12" },
+      { title: "Exploring Sukkur Barrage", category: "Travel", description: "A journey through Sukkur’s historic barrage and Indus River beauty.", date: "2025-08-01", image: "https://picsum.photos/400/200?travel1" },
+      { title: "Best Biryani Spots in Sukkur", category: "Food", description: "Discover the hidden gems of Sukkur’s food culture.", date: "2025-07-28", image: "https://picsum.photos/400/200?food1" },
+      { title: "AI in Everyday Life", category: "Tech", description: "How artificial intelligence is shaping our routines.", date: "2025-07-15", image: "https://picsum.photos/400/200?tech1" },
+      { title: "Trip to Mohenjo-Daro", category: "Travel", description: "A walk through the ruins of the ancient Indus Valley Civilization.", date: "2025-06-20", image: "https://picsum.photos/400/200?travel2" },
+      { title: "Street Food in Pakistan", category: "Food", description: "Pakistani street food adventures you can’t miss.", date: "2025-06-10", image: "https://picsum.photos/400/200?food2" },
+      { title: "Future of Programming", category: "Tech", description: "Which coding languages will dominate in the next decade?", date: "2025-05-30", image: "https://picsum.photos/400/200?tech2" }
     ];
 
     const postsPerPage = 3;
     let currentPage = 1;
 
-    const postsGrid = document.getElementById("postsGrid");
-    const categoryFilter = document.getElementById("categoryFilter");
-    const searchInput = document.getElementById("searchInput");
-    const prevPageBtn = document.getElementById("prevPage");
-    const nextPageBtn = document.getElementById("nextPage");
+    function displayPosts() {
+      const container = document.getElementById("blogContainer");
+      const category = document.getElementById("categoryFilter").value;
+      const search = document.getElementById("searchInput").value.toLowerCase();
 
-    function renderPosts() {
-      postsGrid.innerHTML = "";
-      let filteredPosts = posts.filter(post =>
-        (categoryFilter.value === "All" || post.category === categoryFilter.value) &&
-        post.title.toLowerCase().includes(searchInput.value.toLowerCase())
+      let filteredPosts = posts.filter(p =>
+        (category === "all" || p.category === category) &&
+        p.title.toLowerCase().includes(search)
       );
 
       const start = (currentPage - 1) * postsPerPage;
       const end = start + postsPerPage;
       const paginatedPosts = filteredPosts.slice(start, end);
 
-      paginatedPosts.forEach(post => {
-        const card = document.createElement("div");
-        card.className = "card";
-        card.innerHTML = `
-          <img src="${post.image}" alt="${post.title}" />
+      container.innerHTML = paginatedPosts.map(p => `
+        <div class="card">
+          <img src="${p.image}" alt="${p.title}">
           <div class="card-content">
-            <h3>${post.title}</h3>
-            <p>${post.description}</p>
-            <small>${post.date} | ${post.category}</small>
+            <h3>${p.title}</h3>
+            <p>${p.description}</p>
+            <p class="date">${p.date}</p>
           </div>
-        `;
-        postsGrid.appendChild(card);
-      });
-
-      prevPageBtn.disabled = currentPage === 1;
-      nextPageBtn.disabled = end >= filteredPosts.length;
+        </div>
+      `).join("");
     }
 
-    categoryFilter.addEventListener("change", () => {
-      currentPage = 1;
-      renderPosts();
-    });
+    function nextPage() {
+      const totalPages = Math.ceil(posts.length / postsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        displayPosts();
+      }
+    }
 
-    searchInput.addEventListener("input", () => {
-      currentPage = 1;
-      renderPosts();
-    });
-
-    prevPageBtn.addEventListener("click", () => {
+    function prevPage() {
       if (currentPage > 1) {
         currentPage--;
-        renderPosts();
+        displayPosts();
       }
+    }
+
+    document.getElementById("categoryFilter").addEventListener("change", () => {
+      currentPage = 1;
+      displayPosts();
     });
 
-    nextPageBtn.addEventListener("click", () => {
-      currentPage++;
-      renderPosts();
+    document.getElementById("searchInput").addEventListener("input", () => {
+      currentPage = 1;
+      displayPosts();
     });
 
-    renderPosts();
+    displayPosts();
   </script>
+
 </body>
 </html>
