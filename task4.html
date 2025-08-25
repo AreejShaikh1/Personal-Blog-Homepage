@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Personal Blog</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .filters button, .filters input {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+    .filters button.active {
+      background: #2563eb;
+      color: white;
+      border: none;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: scale(1.02);
+    }
+    .card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 15px;
+    }
+    .card-content h2 {
+      font-size: 1.2rem;
+      margin: 0 0 8px;
+    }
+    .card-content p {
+      margin: 4px 0;
+      color: #555;
+      font-size: 0.9rem;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 5px;
+    }
+    .pagination button {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      background: white;
+    }
+    .pagination button.active {
+      background: #2563eb;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>My Personal Blog</h1>
+    <p>Sharing thoughts, stories & experiences</p>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" data-category="All">All</button>
+    <button class="filter-btn" data-category="Tech">Tech</button>
+    <button class="filter-btn" data-category="Travel">Travel</button>
+    <button class="filter-btn" data-category="Food">Food</button>
+    <input type="text" id="searchInput" placeholder="Search posts...">
+  </div>
+
+  <div id="postsGrid" class="grid"></div>
+
+  <div class="pagination" id="pagination"></div>
+
+  <script>
+    const posts = [
+      { id: 1, title: "Exploring React Hooks", category: "Tech", image: "https://source.unsplash.com/400x200/?code", description: "A beginner-friendly guide to using React Hooks effectively.", date: "2025-08-10" },
+      { id: 2, title: "My Trip to the Mountains", category: "Travel", image: "https://source.unsplash.com/400x200/?mountains", description: "Sharing my travel experience and breathtaking views.", date: "2025-08-15" },
+      { id: 3, title: "Best Street Food in Asia", category: "Food", image: "https://source.unsplash.com/400x200/?food", description: "A food lover’s journey through Asian street food.", date: "2025-08-18" },
+      { id: 4, title: "Next.js vs React: What to Choose?", category: "Tech", image: "https://source.unsplash.com/400x200/?laptop", description: "Comparing Next.js with React for modern web apps.", date: "2025-08-19" },
+      { id: 5, title: "Hidden Beaches You Should Visit", category: "Travel", image: "https://source.unsplash.com/400x200/?beach", description: "Top underrated beach destinations for travelers.", date: "2025-08-20" },
+    ];
+
+    const postsPerPage = 3;
+    let currentPage = 1;
+    let currentCategory = "All";
+    let searchQuery = "";
+
+    const postsGrid = document.getElementById("postsGrid");
+    const pagination = document.getElementById("pagination");
+    const searchInput = document.getElementById("searchInput");
+
+    function renderPosts() {
+      let filtered = posts.filter(post =>
+        (currentCategory === "All" || post.category === currentCategory) &&
+        post.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      const totalPages = Math.ceil(filtered.length / postsPerPage);
+      if (currentPage > totalPages) currentPage = 1;
+
+      const start = (currentPage - 1) * postsPerPage;
+      const currentPosts = filtered.slice(start, start + postsPerPage);
+
+      postsGrid.innerHTML = currentPosts.map(post => `
+        <div class="card">
+          <img src="${post.image}" alt="${post.title}">
+          <div class="card-content">
+            <h2>${post.title}</h2>
+            <p>${post.date} • ${post.category}</p>
+            <p>${post.description}</p>
+          </div>
+        </div>
+      `).join("");
+
+      pagination.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.className = i === currentPage ? "active" : "";
+        btn.onclick = () => {
+          currentPage = i;
+          renderPosts();
+        };
+        pagination.appendChild(btn);
+      }
+    }
+
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentCategory = btn.dataset.category;
+        currentPage = 1;
+        renderPosts();
+      });
+    });
+
+    searchInput.addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      currentPage = 1;
+      renderPosts();
+    });
+
+    renderPosts();
+  </script>
+</body>
+</html>
